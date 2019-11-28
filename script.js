@@ -65,10 +65,8 @@ class Puissance4 {
 
     handle_after_play(column) {
         if (this.winner !== null) {
-            if (window.confirm("Game over!\n\nDo you want to restart?")) {
-                this.reset();
-                this.render();
-            }
+            this.reset();
+            this.render();
             return;
         }
 
@@ -77,13 +75,13 @@ class Puissance4 {
             //des chaînes de caractères. Si on veut être sûr de ne pas faire de bêtise,
             //il vaut mieux la convertir en entier avec parseInt
             column = parseInt(column);
-            let row = this.play(parseInt(column));
+            let row = this.play(column);
 
             if (row === null) {
                 window.alert("Column is full!");
             } else {
                 // Vérifier s'il y a un gagnant, ou si la partie est finie
-                if (this.win(row, column, this.turn, this.board)) {
+                if (Puissance4.win(row, column, this.turn, this.board)) {
                     this.winner = this.turn;
                 } else if (this.moves >= this.rows * this.columns) {
                     this.winner = 0;
@@ -147,30 +145,32 @@ class Puissance4 {
        true  : si la partie est gagnée par le joueur `player`
        false : si la partie continue
    */
-    win(row, column, player, board) {
+    static win(row, column, player, board) {
         // Horizontal
         let count = 0;
-        for (let j = 0; j < this.cols; j++) {
+        let cols = board[0].length
+        let rows = board.length
+        for (let j = 0; j < cols; j++) {
             count = (board[row][j] == player) ? count + 1 : 0;
             if (count >= 4) return true;
         }
         // Vertical
         count = 0;
-        for (let i = 0; i < this.rows; i++) {
+        for (let i = 0; i < rows; i++) {
             count = (board[i][column] == player) ? count + 1 : 0;
             if (count >= 4) return true;
         }
         // Diagonal
         count = 0;
         let shift = row - column;
-        for (let i = Math.max(shift, 0); i < Math.min(this.rows, this.cols + shift); i++) {
+        for (let i = Math.max(shift, 0); i < Math.min(rows, cols + shift); i++) {
             count = (board[i][i - shift] == player) ? count + 1 : 0;
             if (count >= 4) return true;
         }
         // Anti-diagonal
         count = 0;
         shift = row + column;
-        for (let i = Math.max(shift - this.cols + 1, 0); i < Math.min(this.rows, shift + 1); i++) {
+        for (let i = Math.max(shift - cols + 1, 0); i < Math.min(rows, shift + 1); i++) {
             count = (board[i][shift - i] == player) ? count + 1 : 0;
             if (count >= 4) return true;
         }
