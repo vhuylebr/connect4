@@ -63,8 +63,7 @@ class Puissance4 {
         }
     }
 
-    handle_click(event) {
-        // Vérifier si la partie est encore en cours
+    handle_after_play(column) {
         if (this.winner !== null) {
             if (window.confirm("Game over!\n\nDo you want to restart?")) {
                 this.reset();
@@ -73,7 +72,6 @@ class Puissance4 {
             return;
         }
 
-        let column = event.target.dataset.column;
         if (column !== undefined) {
             //attention, les variables dans les datasets sont TOUJOURS 
             //des chaînes de caractères. Si on veut être sûr de ne pas faire de bêtise,
@@ -108,9 +106,18 @@ class Puissance4 {
                 }
             }
         }
-
+    }
+    handle_click(event) {
+        // Vérifier si la partie est encore en cours
+        this.handle_after_play(event.target.dataset.column);
+        this.playIA()
     }
 
+    playIA() {
+        console.log("Mettre l'algorithme ICI")
+        let column = 3;
+        this.handle_after_play(column)
+    }
     start(rows, cols, player1, beginner) {
             this.rows = rows;
             this.cols = cols;
@@ -128,9 +135,8 @@ class Puissance4 {
                 this.element.addEventListener('click', (event) => this.handle_click(event));
                 if (this.beginner === "player2") {
                     // IA turn
+                    this.playIA()
                 }
-            } else {
-                // IA turn
             }
         }
         /* 
@@ -165,7 +171,6 @@ class Puissance4 {
         count = 0;
         shift = row + column;
         for (let i = Math.max(shift - this.cols + 1, 0); i < Math.min(this.rows, shift + 1); i++) {
-            console.log(i, shift - i, shift)
             count = (this.board[i][shift - i] == player) ? count + 1 : 0;
             if (count >= 4) return true;
         }
