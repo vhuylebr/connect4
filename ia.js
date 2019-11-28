@@ -98,6 +98,7 @@ class IA {
             v = Infinity
             for (let i = 0 ; i < Object.keys(tree.leaves).length ; i += 1) {
                 v = Math.min(v, alphaBeta(tree.leaves[i], alpha, beta))
+                tree.leaves[i].weight = v
                 if (alpha >= v)
                     return v
                 else
@@ -108,6 +109,7 @@ class IA {
             v = -Infinity
             for (let i = 0 ; i < Object.keys(tree.leaves).length ; i += 1) {
                 v = Math.max(v, alphaBeta(tree.leaves[i], alpha, beta))
+                tree.leaves[i].weight = v
                 if (v >= beta)
                     return v
                 else
@@ -145,5 +147,15 @@ class IA {
     play(map) {
         let tree = {}
         this.addDepth(tree, map, this.player, 0)
+        this.alphaBeta(tree, -Infinity, +Infinity)
+        let final = 0
+        let max = 0
+        for (let i = 0 ; Object.keys(tree.leaves) ; i += 1) {
+            if (tree.leaves.weight > max) {
+                max = tree.leaves.weight
+                final = i
+            }
+        }
+        return final
     }
 }
