@@ -113,6 +113,8 @@ class Puissance4 {
 
     playIA() {
         console.log("Mettre l'algorithme ICI")
+        const ia = new IA(2);
+
         let column = 3;
         this.handle_after_play(column)
     }
