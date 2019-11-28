@@ -112,11 +112,9 @@ class Puissance4 {
     }
 
     playIA() {
-        console.log("Mettre l'algorithme ICI")
-        const ia = new IA(2);
-
-        let column = 3;
-        this.handle_after_play(column)
+        let col = this.ia.play(JSON.parse(JSON.stringify(this.board)))
+        console.log(col)
+        this.handle_after_play(col)
     }
     start(rows, cols, player1, beginner) {
             this.rows = rows;
@@ -137,6 +135,7 @@ class Puissance4 {
                     // IA turn
                     this.playIA()
                 }
+                this.ia = new IA(2)
             }
         }
         /* 

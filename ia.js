@@ -34,7 +34,7 @@ function win(row, column, player, board) {
 class IA {
     tree = { weight: 0, leaves: {} }
     player = 0
-    maxDepth = 8
+    maxDepth = 2
 
     constructor(player) {
         this.player = player
@@ -46,12 +46,12 @@ class IA {
 
 
     dispMap(map) {
-        for (let i = 0 ; i < map.length + 2 ; i += 1)
+        for (let i = 0; i < map.length + 2; i += 1)
             process.stdout.write("-")
         process.stdout.write("\n")
-        for (let i = map.length - 1 ; i >= 0 ; i -= 1) {
+        for (let i = map.length - 1; i >= 0; i -= 1) {
             process.stdout.write("|")
-            for (let j = 0 ; j < map[i].length ; j += 1) {
+            for (let j = 0; j < map[i].length; j += 1) {
                 if (map[i][j] == 1)
                     process.stdout.write("X")
                 else if (map[i][j] == 2)
@@ -61,7 +61,7 @@ class IA {
             }
             process.stdout.write("|\n")
         }
-        for (let i = 0 ; i < map.length + 2 ; i += 1)
+        for (let i = 0; i < map.length + 2; i += 1)
             process.stdout.write("-")
         process.stdout.write("\n")
     }
@@ -92,12 +92,14 @@ class IA {
 
     alphaBeta(tree, alpha, beta) {
         let v = 0
-        if (Object.keys(tree.leaves).length == 0)
+        if (Object.keys(tree).length == 0 || Object.keys(tree.leaves).length == 0)
             return tree.weight
         else if (tree.player != this.player) {
             v = Infinity
-            for (let i = 0 ; i < Object.keys(tree.leaves).length ; i += 1) {
-                v = Math.min(v, alphaBeta(tree.leaves[i], alpha, beta))
+            for (let i = 0; i < Object.keys(tree.leaves).length; i += 1) {
+                if (tree.leaves[i] == null)
+                    continue
+                v = Math.min(v, this.alphaBeta(tree.leaves[i], alpha, beta))
                 tree.leaves[i].weight = v
                 if (alpha >= v)
                     return v
@@ -107,8 +109,10 @@ class IA {
             }
         } else {
             v = -Infinity
-            for (let i = 0 ; i < Object.keys(tree.leaves).length ; i += 1) {
-                v = Math.max(v, alphaBeta(tree.leaves[i], alpha, beta))
+            for (let i = 0; i < Object.keys(tree.leaves).length; i += 1) {
+                if (tree.leaves[i] == null)
+                    continue
+                v = Math.max(v, this.alphaBeta(tree.leaves[i], alpha, beta))
                 tree.leaves[i].weight = v
                 if (v >= beta)
                     return v
@@ -127,8 +131,8 @@ class IA {
         }
         //this.dispMap(map)
         this.initTree(tree, map, player)
-        //console.log("here", tree)
-        for (let key = 0; key < Object.keys(tree.leaves).length ; key += 1) {
+            //console.log("here", tree)
+        for (let key = 0; key < Object.keys(tree.leaves).length; key += 1) {
             let col = Object.keys(tree.leaves)[key]
             let row = this.getAvailRow(map, col)
             if (row != -1) {
@@ -137,7 +141,7 @@ class IA {
                     this.addDepth(tree.leaves[col], JSON.parse(JSON.stringify(map)), (player == 1 ? 2 : 1), depth + 1)
                 else {
                     tree.leaves[col].weight = (player == this.player ? 1 : -1)
-                    //this.dispMap(map)
+                        //this.dispMap(map)
                 }
                 map[row][col] = 0
             }
@@ -147,10 +151,10 @@ class IA {
     play(map) {
         let tree = {}
         this.addDepth(tree, map, this.player, 0)
-        this.alphaBeta(tree, -Infinity, +Infinity)
+            //this.alphaBeta(tree, -Infinity, +Infinity)
         let final = 0
         let max = 0
-        for (let i = 0 ; Object.keys(tree.leaves) ; i += 1) {
+        for (let i = 0; Object.keys(tree.leaves); i += 1) {
             if (tree.leaves.weight > max) {
                 max = tree.leaves.weight
                 final = i
