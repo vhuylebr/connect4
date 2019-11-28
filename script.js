@@ -83,7 +83,7 @@ class Puissance4 {
                 window.alert("Column is full!");
             } else {
                 // Vérifier s'il y a un gagnant, ou si la partie est finie
-                if (this.win(row, column, this.turn)) {
+                if (this.win(row, column, this.turn, this.board)) {
                     this.winner = this.turn;
                 } else if (this.moves >= this.rows * this.columns) {
                     this.winner = 0;
@@ -147,31 +147,31 @@ class Puissance4 {
        true  : si la partie est gagnée par le joueur `player`
        false : si la partie continue
    */
-    win(row, column, player) {
+    win(row, column, player, board) {
         // Horizontal
         let count = 0;
         for (let j = 0; j < this.cols; j++) {
-            count = (this.board[row][j] == player) ? count + 1 : 0;
+            count = (board[row][j] == player) ? count + 1 : 0;
             if (count >= 4) return true;
         }
         // Vertical
         count = 0;
         for (let i = 0; i < this.rows; i++) {
-            count = (this.board[i][column] == player) ? count + 1 : 0;
+            count = (board[i][column] == player) ? count + 1 : 0;
             if (count >= 4) return true;
         }
         // Diagonal
         count = 0;
         let shift = row - column;
         for (let i = Math.max(shift, 0); i < Math.min(this.rows, this.cols + shift); i++) {
-            count = (this.board[i][i - shift] == player) ? count + 1 : 0;
+            count = (board[i][i - shift] == player) ? count + 1 : 0;
             if (count >= 4) return true;
         }
         // Anti-diagonal
         count = 0;
         shift = row + column;
         for (let i = Math.max(shift - this.cols + 1, 0); i < Math.min(this.rows, shift + 1); i++) {
-            count = (this.board[i][shift - i] == player) ? count + 1 : 0;
+            count = (board[i][shift - i] == player) ? count + 1 : 0;
             if (count >= 4) return true;
         }
 
