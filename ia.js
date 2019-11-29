@@ -34,7 +34,7 @@ function win(row, column, player, board) {
 class IA {
     tree = { weight: 0, leaves: {} }
     player = 0
-    maxDepth = 2
+    maxDepth = 4
 
     constructor(player) {
         this.player = player
@@ -131,7 +131,7 @@ class IA {
         }
         //this.dispMap(map)
         this.initTree(tree, map, player)
-            //console.log("here", tree)
+        //console.log("here", tree)
         for (let key = 0; key < Object.keys(tree.leaves).length; key += 1) {
             let col = Object.keys(tree.leaves)[key]
             let row = this.getAvailRow(map, col)
@@ -151,15 +151,22 @@ class IA {
     play(map) {
         let tree = {}
         this.addDepth(tree, map, this.player, 0)
-            //this.alphaBeta(tree, -Infinity, +Infinity)
-        let final = 0
-        let max = 0
-        for (let i = 0; Object.keys(tree.leaves); i += 1) {
-            if (tree.leaves.weight > max) {
-                max = tree.leaves.weight
-                final = i
+        this.alphaBeta(tree, -Infinity, +Infinity)
+        let final = []
+        let max = -Infinity
+        console.log(tree)
+        for (let i = 0; i < Object.keys(tree.leaves).length ; i += 1) {
+            if (tree.leaves[i].weight > max) {
+                max = tree.leaves[i].weight
+                final = []
+                final.push(i)
+            } else if (tree.leaves[i].weight == max) {
+                final.push(i)
             }
+            console.log("here", final)
         }
+        final = final[Math.round((Math.random() * 100)) % final.length]
+        console.log("IA HAS CHOSE TO PLAY ON COLUMN ", final)
         return final
     }
 }
