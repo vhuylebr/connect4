@@ -51,14 +51,14 @@ class Puissance4 {
             }
 
             this.player = this.player == 1 ? 0 : 1;
-            if (this.map.getMapScore() == -Infinity) alert("joueur 1 à gagné");
-            if (this.map.getMapScore() == Infinity) alert("joueur 2 à gagné");
+            if (this.map.getMapWeight() == -Infinity) alert("joueur 1 à gagné");
+            if (this.map.getMapWeight() == Infinity) alert("joueur 2 à gagné");
             if (this.map.isFull()) alert("égalité");
         }
     }
 
     isNotFinished = () => {
-        return this.map.getMapScore() != Infinity && this.map.getMapScore() != -Infinity && !this.map.isFull()
+        return this.map.getMapWeight() != Infinity && this.map.getMapWeight() != -Infinity && !this.map.isFull()
     }
 
     IAPlay = () => {
@@ -69,12 +69,12 @@ class Puissance4 {
     }
 
     alphaBeta = (map, depth, isMax, alpha, beta) => {
-        var score = map.getMapScore();
+        var weight = map.getMapWeight();
 
-        if (map.isFinished(depth, score)) {
+        if (map.isFinished(depth, weight)) {
             return {
                 column: null,
-                weight: score
+                weight: weight
             };
         }
 
