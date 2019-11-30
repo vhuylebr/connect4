@@ -22,7 +22,7 @@ class Map {
                     break;
                 }
             }
-            this.player = this.player == 1 ? 0 : 1;
+            this.player = this.player == 1 ? 2 : 1;
             this.moves += 1;
             return true;
         } else {
@@ -34,12 +34,12 @@ class Map {
         var weightPlayer2 = 0;
 
         for (var i = 0; i < 4; i++) {
-            if (this.map[row][column] == 0) {
+            if (this.map[row][column] == 1) {
                 weightPlayer1++;
                 if (weightPlayer1 == 4) {
                     return -Infinity;
                 }
-            } else if (this.map[row][column] == 1) {
+            } else if (this.map[row][column] == 2) {
                 weightPlayer2++;
                 if (weightPlayer2 == 4) {
                     return Infinity;

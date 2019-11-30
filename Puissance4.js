@@ -2,14 +2,14 @@ class Puissance4 {
     rows = 6;
     columns = 7;
     depth = 5;
-    player = 0;
+    player = 1;
     constructor() {
         game_map = Array(this.rows);
         for (let i = 0; i < this.rows; i++) {
-            game_map[i] = Array(this.cols).fill(null);
+            game_map[i] = Array(this.cols).fill(0);
         }
         this.ia = new IA(this.rows, this.columns)
-        this.map = new Map(game_map, 0, this.rows, this.columns);
+        this.map = new Map(game_map, 1, this.rows, this.columns);
 
         var game_map = document.getElementById('map');
         for (var i = 0; i < this.rows; i++) {
@@ -25,7 +25,7 @@ class Puissance4 {
 
     handleClic = (event) => {
 
-        if (this.player == 0) {
+        if (this.player == 1) {
             this.setCoinRender(event.target.dataset.column);
             if (this.isNotFinished()) {
                 var res = this.ia.alphaBeta(this.map, this.depth, true);
@@ -48,15 +48,15 @@ class Puissance4 {
                 let tr = table.appendChild(document.createElement('tr'));
                 for (var j = 0; j < this.columns; j++) {
                     let td = tr.appendChild(document.createElement('td'));
-                    let colour = map[y][j];
-                    if (colour == 1)
+                    let player = map[y][j];
+                    if (player == 2)
                         td.className = 'player2';
-                    if (colour == 0)
+                    if (player == 1)
                         td.className = 'player1';
                     td.dataset.column = j;
                 }
             }
-            this.player = this.player == 1 ? 0 : 1;
+            this.player = this.player == 1 ? 2 : 1;
             if (this.map.getMapWeight() == -Infinity) alert("joueur 1 à gagné");
             if (this.map.getMapWeight() == Infinity) alert("joueur 2 à gagné");
             if (this.map.isFull()) alert("égalité");
