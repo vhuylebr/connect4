@@ -19,9 +19,11 @@ class IA {
 
         if (isMax) {
             var max = { column: null, depth, weight: -Infinity };
+            //console.log("enter")
             for (var column = 0; column < this.columns; column++) {
                 var new_map = map.copy();
                 //console.log(column)
+                //console.log("coming through")
                 if (new_map.setCoin(column)) {
                     var res = this.alphaBeta(new_map, depth - 1, false, alpha, beta);
                     if (max.column == null || res.weight > max.weight) {
@@ -32,6 +34,9 @@ class IA {
                         //console.log("A")
                         return max;
                     }
+                } else {
+                    console.log("did not enter for ", column)
+                    
                 }
             }
             //console.log("B")
@@ -46,7 +51,8 @@ class IA {
                         min = { column, depth, weight: res.weight }
                         beta = res.weight;
                     }
-                    if (alpha >= beta) {//console.log("C");
+                    if (alpha >= beta) {
+                        //console.log("C");
                         return min
                     };
                 }
@@ -57,10 +63,8 @@ class IA {
     }
 
     play(map) {
-        //console.log("GAME START")
         let mapObj = new Map(map, this.player, this.rows, this.columns)
         let res = this.alphaBeta(mapObj, 5, true)
-        //console.log(res)
         return res.column
     }
 }

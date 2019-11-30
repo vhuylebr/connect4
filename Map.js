@@ -7,6 +7,13 @@ class Map {
         this.rows = rows;
     }
 
+    printMap() {
+        console.log("MAP DUMP")
+        for (let i = 0 ; i < 7 ; i += 1)  {
+            console.log(this.map[i])
+        }
+    }
+
     isFinished = (depth, weight) => {
         if (depth == 0 || weight == Infinity || weight == -Infinity || this.isFull()) {
             return true;
@@ -15,9 +22,10 @@ class Map {
     }
 
     setCoin = (column) => {
-        if (this.map[0][column] == 0 && column >= 0 && column < this.columns) {
+
+        if ((this.map[0][column] == null || this.map[0][column] == 0) && column >= 0 && column < this.columns) {
             for (var y = this.rows - 1; y >= 0; y--) {
-                if (this.map[y][column] == 0) {
+                if (this.map[y][column] == null || this.map[y][column] == 0) {
                     this.map[y][column] = this.player;
                     break;
                 }
@@ -26,6 +34,13 @@ class Map {
             this.moves += 1;
             return true;
         } else {
+            /*console.log("ERR", this.map[0][column], column, this.columns)
+            if (column == 6) {
+                console.log("INSIDE MAP ====> " + this.map[0][column])
+                for (let i = 0 ; i < 7 ; i += 1)  {
+                    console.log(this.map[i])
+                }
+            }*/
             return false;
         }
     }
