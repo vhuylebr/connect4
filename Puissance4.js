@@ -8,7 +8,7 @@ class Puissance4 {
         for (let i = 0; i < this.rows; i++) {
             game_map[i] = Array(this.cols).fill(null);
         }
-
+        this.ia = new IA(this.rows, this.columns)
         this.map = new Map(game_map, 0, this.rows, this.columns);
 
         var game_map = document.getElementById('map');
@@ -27,7 +27,11 @@ class Puissance4 {
 
         if (this.player == 0) {
             this.setCoinRender(event.target.dataset.column);
-            this.IAPlay();
+            if (this.isNotFinished()) {
+                var res = this.ia.alphaBeta(this.map, this.depth, true);
+                this.setCoinRender(res.column);
+            }
+
         }
     }
 
@@ -63,48 +67,4 @@ class Puissance4 {
         return this.map.getMapWeight() != Infinity && this.map.getMapWeight() != -Infinity && !this.map.isFull()
     }
 
-    IAPlay = () => {
-        if (this.isNotFinished()) {
-            var res = this.alphaBeta(this.map, this.depth, true);
-            this.setCoinRender(res.column);
-        }
-    }
-
-    alphaBeta = (map, depth, isMax, alpha, beta) => {
-        var weight = map.getMapWeight();
-
-        if (map.isFinished(depth, weight)) {
-            return { column: null, depth, weight: weight };
-        }
-
-        if (isMax) {
-            var max = { column: null, depth, weight: -Infinity };
-            for (var column = 0; column < this.columns; column++) {
-                var new_map = map.copy();
-                if (new_map.setCoin(column)) {
-                    var res = this.alphaBeta(new_map, depth - 1, false, alpha, beta);
-                    if (max.column == null || res.weight > max.weight) {
-                        max = { column, depth, weight: res.weight }
-                        alpha = res.weight;
-                    }
-                    if (alpha >= beta) return max;
-                }
-            }
-            return max;
-        } else {
-            var min = { column: null, depth, weight: Infinity };
-            for (var column = 0; column < this.columns; column++) {
-                var new_map = map.copy();
-                if (new_map.setCoin(column)) {
-                    var res = this.alphaBeta(new_map, depth - 1, true, alpha, beta);
-                    if (min.column == null || res.weight < min.weight) {
-                        min = { column, depth, weight: res.weight }
-                        beta = res.weight;
-                    }
-                    if (alpha >= beta) return min;
-                }
-            }
-            return min;
-        }
-    }
 }
