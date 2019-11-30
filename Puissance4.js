@@ -1,7 +1,7 @@
 class Puissance4 {
     rows = 6;
     columns = 7;
-    depth = 4;
+    depth = 5;
     player = 0;
     constructor() {
         game_map = Array(this.rows);
@@ -36,7 +36,7 @@ class Puissance4 {
         if (this.isNotFinished()) {
 
             if (!this.map.setCoin(column)) {
-                return alert("Invalid move!");
+                return alert("La colonne est pleine");
             }
 
             for (var y = this.rows - 1; y >= 0; y--) {
@@ -72,20 +72,17 @@ class Puissance4 {
         var weight = map.getMapWeight();
 
         if (map.isFinished(depth, weight)) {
-            return {
-                column: null,
-                weight: weight
-            };
+            return { column: null, depth, weight: weight };
         }
 
         if (isMax) {
-            var max = { column: null, weight: -Infinity };
+            var max = { column: null, depth, weight: -Infinity };
             for (var column = 0; column < this.columns; column++) {
                 var new_map = map.copy();
                 if (new_map.setCoin(column)) {
                     var res = this.alphaBeta(new_map, depth - 1, false, alpha, beta);
                     if (max.column == null || res.weight > max.weight) {
-                        max = { column, weight: res.weight }
+                        max = { column, depth, weight: res.weight }
                         alpha = res.weight;
                     }
                     if (alpha >= beta) return max;
@@ -93,13 +90,13 @@ class Puissance4 {
             }
             return max;
         } else {
-            var min = { column: null, weight: Infinity };
+            var min = { column: null, depth, weight: Infinity };
             for (var column = 0; column < this.columns; column++) {
                 var new_map = map.copy();
                 if (new_map.setCoin(column)) {
                     var res = this.alphaBeta(new_map, depth - 1, true, alpha, beta);
                     if (min.column == null || res.weight < min.weight) {
-                        min = { column, weight: res.weight }
+                        min = { column, depth, weight: res.weight }
                         beta = res.weight;
                     }
                     if (alpha >= beta) return min;
