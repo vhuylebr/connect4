@@ -32,24 +32,26 @@ class Puissance4 {
     }
 
     setCoinRender = (column) => {
-        let game_map = document.getElementById('map')
+        let table = document.getElementById('map')
         if (this.isNotFinished()) {
 
             if (!this.map.setCoin(column)) {
                 return alert("La colonne est pleine");
             }
-
-            for (var y = this.rows - 1; y >= 0; y--) {
-                if (game_map.rows[y].cells[column].className == 'empty') {
-                    if (this.player == 1) {
-                        game_map.rows[y].cells[column].className = 'coin player2';
-                    } else {
-                        game_map.rows[y].cells[column].className = 'coin player1';
-                    }
-                    break;
+            table.innerHTML = ''
+            let map = this.map.getArrayMap()
+            for (var y = 0; y < this.rows; y++) {
+                let tr = table.appendChild(document.createElement('tr'));
+                for (var j = 0; j < this.columns; j++) {
+                    let td = tr.appendChild(document.createElement('td'));
+                    let colour = map[y][j];
+                    if (colour == 1)
+                        td.className = 'player2';
+                    if (colour == 0)
+                        td.className = 'player1';
+                    td.dataset.column = j;
                 }
             }
-
             this.player = this.player == 1 ? 0 : 1;
             if (this.map.getMapWeight() == -Infinity) alert("joueur 1 à gagné");
             if (this.map.getMapWeight() == Infinity) alert("joueur 2 à gagné");

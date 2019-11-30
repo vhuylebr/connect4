@@ -80,4 +80,7 @@ class Map {
     copy = () => {
         return new Map(JSON.parse(JSON.stringify(this.map)), this.player, this.rows, this.columns);
     }
+    getArrayMap() {
+        return this.map
+    }
 }
