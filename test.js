@@ -37,15 +37,14 @@ class RandomAI {
 
 	play(map) {
 		let columns = map.length
-		let rows = map[0].length
 		let choices = []
 		for (let i = 0; i < columns; i += 1) {
-			if (map[rows - 1][i] == 0) {
+			if (map[0][i] == 0) {
 				choices.push(i)
 			}
 		}
 		let res = choices[Math.round((Math.random() * 100)) % choices.length]
-		//console.log("Random AI chose to play on ", res)
+		console.log("Random plays on ", res)
 		return res
 	}
 }
@@ -55,9 +54,10 @@ class Test {
 	getAvailRow(map, col) {
 		if (map[0].length < col)
 		    return -1
-		for (let i = 0; i < map.length; i += 1) {
-		    if (map[i][col] == 0)
+		for (let i = 6 ; i >= 0 ; i -= 1) {
+		    if (map[i][col] == 0) {
 			return i
+		    }
 		}
 		return -1
 	    }
@@ -70,8 +70,11 @@ class Test {
 			[0,0,0,0,0,0,0],
 			[0,0,0,0,0,0,0],
 			[0,0,0,0,0,0,0],
-			[0,0,0,0,0,0,0]
+			[0,0,0,0,0,0,0],
+
 		]
+		player1.setPlayer(1)
+		player2.setPlayer(2)
 		let actPlayer = 1
 		let col = player1.play(map)
 		let lastMove = {row: this.getAvailRow(map, col), col}
@@ -85,18 +88,26 @@ class Test {
 				col = player2.play(map)
 			lastMove = {row: this.getAvailRow(map, col), col}
 			map[lastMove.row][lastMove.col] = actPlayer
+			for (let i = 0 ; i < 7 ; i += 1) {
+				console.log(map[i])
+			}
+			console.log("")
 		}
 		let res = {
 			result: i == 100 ? 0 : actPlayer,
 			rounds: i,
 		}
+		for (let i = 0 ; i < 7 ; i += 1) {
+			console.log(map[i])
+		}
+		console.log("sqd")
 		return (res)
 	}
 
 	gameTest() {
 		let report = "### Duel tests\n\n"
 		let random = new RandomAI()
-		let ia = new IA(6, 7)
+		let ia = new IA(7, 7)
 		ia.setPlayer(1)
 		random.setPlayer(2)
 		let totalVictories = 0
@@ -143,14 +154,14 @@ class Test {
 		// AI vs AI
 		victories = 0
 		timeouts = 0
-		let ai2 = new AI(6, 7)
+		let ai2 = new IA(7, 7)
 		ia.setPlayer(1)
 		ai2.setPlayer(2)
 		report += "3) AI vs AI\n\n"
 		for (let i = 0 ; i < 5 ; i += 1) {
 			let res = this.game(ia, ai2)
 			report += "# Match n°" + (i + 1) + "/5 ended in " + res.rounds + " rounds :\n"
-			report += "=> " + (res.result == 0 ? "Timeout" : "Player " + (res.result == 2 ? "AI" : "Random") + " wins !") + "\n\n"
+			report += "=> " + (res.result == 0 ? "Timeout" : "Player " + res.result + " wins !") + "\n\n"
 			if (res.result == 2)
 				victories += 1
 			else if (res.result == 0)
@@ -173,7 +184,7 @@ class Test {
 	}
 
 	caseTests() {
-		let ia = new IA(6, 7)
+		let ia = new IA(7, 7)
 		ia.setPlayer(1)
 		let res = { report: "### Case tests\n\n", win: 0, testNb: 0 }
 		res.report += "1) Imminent defeat detection\n\n"
@@ -285,7 +296,16 @@ class Test {
 
 `
 		report += this.gameTest()
-		report += this.caseTests()
+		//report += this.caseTests()
 		console.log(report)
+	}
+
+	abc() {
+		let random = new RandomAI()
+		let ia = new IA(7, 7)
+		ia.setPlayer(1)
+		random.setPlayer(2)
+		let res = this.game(ia, random)
+		console.log("winner is " , res)
 	}
 }

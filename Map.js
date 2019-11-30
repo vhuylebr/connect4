@@ -1,10 +1,11 @@
 class Map {
-    constructor(map, player, rows, columns) {
+    constructor(map, player, rows, columns, iaPlayer) {
         this.map = map;
         this.player = player;
         this.moves = 0;
         this.columns = columns;
         this.rows = rows;
+        this.iaPlayer = iaPlayer;
     }
 
     printMap() {
@@ -93,7 +94,7 @@ class Map {
     }
 
     copy = () => {
-        return new Map(JSON.parse(JSON.stringify(this.map)), this.player, this.rows, this.columns);
+        return new Map(JSON.parse(JSON.stringify(this.map)), this.player, this.rows, this.columns, this.iaPlayer);
     }
     getArrayMap() {
         return this.map
