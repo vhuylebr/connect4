@@ -4,23 +4,38 @@ class Puissance4 {
     depth = 5;
     player = 1;
     constructor() {
-        game_map = Array(this.rows);
-        for (let i = 0; i < this.rows; i++) {
-            game_map[i] = Array(this.cols).fill(0);
-        }
+        // let game_map = Array(this.rows);
+        // for (let i = 0; i < this.rows; i++) {
+        //     game_map[i] = Array(this.cols).fill(0);
+        // }
+        let game_map = [
+            [0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0]
+        ]
         this.ia = new IA(this.rows, this.columns)
-        this.map = new Map(game_map, 1, this.rows, this.columns);
+        this.ia.setPlayer(2)
+        this.map = new Map(game_map, 1, this.rows, this.columns, 2);
 
-        var game_map = document.getElementById('map');
+        var gameMap = document.getElementById('map');
         for (var i = 0; i < this.rows; i++) {
-            let tr = game_map.appendChild(document.createElement('tr'));
+            let tr = gameMap.appendChild(document.createElement('tr'));
             for (var j = 0; j < this.columns; j++) {
                 let td = tr.appendChild(document.createElement('td'));
-                td.className = 'empty';
+                let player = game_map[i][j];
+                if (player == 2)
+                    td.className = 'player2';
+                if (player == 1)
+                    td.className = 'player1';
+                if (player == 0)
+                    td.className = 'empty';
                 td.dataset.column = j;
             }
         }
-        game_map.addEventListener('click', event => this.handleClic(event))
+        gameMap.addEventListener('click', event => this.handleClic(event))
     }
 
     handleClic = (event) => {

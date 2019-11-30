@@ -12,7 +12,7 @@ class IA {
 
     alphaBeta = (map, depth, isMax, alpha, beta) => {
         var weight = map.getMapWeight();
-        
+
         if (map.isFinished(depth, weight)) {
             return { column: null, depth, weight: weight };
         }
@@ -46,7 +46,7 @@ class IA {
                         min = { column, depth, weight: res.weight }
                         beta = res.weight;
                     }
-                    if (alpha >= beta) {//console.log("C");
+                    if (alpha >= beta) { //console.log("C");
                         return min
                     };
                 }
@@ -58,9 +58,9 @@ class IA {
 
     play(map) {
         //console.log("GAME START")
-        let mapObj = new Map(map, this.player, this.rows, this.columns)
+        let mapObj = new Map(map, this.player, this.rows, this.columns, this.iaPlayer)
         let res = this.alphaBeta(mapObj, 5, true)
-        //console.log(res)
+            //console.log(res)
         return res.column
     }
 }
