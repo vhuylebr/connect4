@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>Puissance 4</title>
+    <link rel="stylesheet" href="./style.css">
+</head>
+<div id="menu">
+    <div>Rows <span id="rows"></span><button onclick="lessRows()">-</button><button onclick="moreRows()">+</button></div>
+    <br/>
+    <div>Cols <span id="cols"></span><button onclick="lessCols()">-</button><button onclick="moreCols()">+</button></div>
+    <br/> Select player1
+    <select id="player1">
+            <option value="1">human</option>
+            <option value="2">IA</option>
+        </select> versus player2 IA
+    <br/>
+    <br/>Beginner
+    <select id="beginner">
+                <option value="player1">player1</option>
+                <option value="player2">player2</option>
+            </select>
+    <br/>
+    <br/>
+    <button onclick="start()">Start</button>
+</div>
+<div class="box-left">
+    <table id="map">
+</div>
+<p><button class="save" onclick="location.reload();" type="submit">Restart game</button></p>
+<script src="./Map.js"></script>
+<script src="./Puissance4.js"></script>
+<script>
+    let rows = 6;
+    let cols = 7;
+    document.getElementById("rows").innerHTML = rows;
+    document.getElementById("cols").innerHTML = cols;
+    const p4 = new Puissance4()
+
+    const start = () => {}
+    const moreRows = () => {
+        rows++
+        document.getElementById("rows").innerHTML = rows;
+    }
+    const lessRows = () => {
+        rows--
+        document.getElementById("rows").innerHTML = rows;
+    }
+    const moreCols = () => {
+        cols++
+        document.getElementById("cols").innerHTML = cols;
+    }
+    const lessCols = () => {
+        cols--
+        document.getElementById("cols").innerHTML = cols;
+    }
+</script>
+
+
+</body>
+
+</html>
