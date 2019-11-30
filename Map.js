@@ -15,9 +15,9 @@ class Map {
     }
 
     setCoin = (column) => {
-        if (this.map[0][column] == null && column >= 0 && column < this.columns) {
+        if (this.map[0][column] == 0 && column >= 0 && column < this.columns) {
             for (var y = this.rows - 1; y >= 0; y--) {
-                if (this.map[y][column] == null) {
+                if (this.map[y][column] == 0) {
                     this.map[y][column] = this.player;
                     break;
                 }

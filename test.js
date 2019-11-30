@@ -33,6 +33,8 @@ function win(row, column, player, board) {
 
 class RandomAI {
 
+	setPlayer(){}
+
 	play(map) {
 		let columns = map.length
 		let rows = map[0].length
@@ -43,7 +45,7 @@ class RandomAI {
 			}
 		}
 		let res = choices[Math.round((Math.random() * 100)) % choices.length]
-		console.log("Random AI chose to play on ", res)
+		//console.log("Random AI chose to play on ", res)
 		return res
 	}
 }
@@ -51,9 +53,9 @@ class RandomAI {
 class Test {
 
 	getAvailRow(map, col) {
-		if (map.length < col)
+		if (map[0].length < col)
 		    return -1
-		for (let i = 0; i < map[col].length; i += 1) {
+		for (let i = 0; i < map.length; i += 1) {
 		    if (map[i][col] == 0)
 			return i
 		}
@@ -94,7 +96,9 @@ class Test {
 	gameTest() {
 		let report = "### Duel tests\n\n"
 		let random = new RandomAI()
-		let ia = new RandomAI//IA()
+		let ia = new IA(6, 7)
+		ia.setPlayer(1)
+		random.setPlayer(2)
 		let totalVictories = 0
 		let totalTimeouts = 0
 
@@ -103,6 +107,7 @@ class Test {
 		let victories = 0
 		let timeouts = 0
 		for (let i = 0 ; i < 5 ; i += 1) {
+			console.log("new game")
 			let res = this.game(ia, random)
 			report += "# Match n°" + (i + 1) + "/5 ended in " + res.rounds + " rounds :\n"
 			report += "=> " + (res.result == 0 ? "Timeout" : "Player " + (res.result == 1 ? "AI" : "Random") + " wins !") + "\n\n"
@@ -115,6 +120,8 @@ class Test {
 		totalTimeouts += timeouts
 		totalVictories += victories
 
+		ia.setPlayer(2)
+		random.setPlayer(1)
 		// Random vs AI
 		report += "2) Random vs AI\n\n"
 		victories = 0
@@ -136,7 +143,9 @@ class Test {
 		// AI vs AI
 		victories = 0
 		timeouts = 0
-		let ai2 = new RandomAI()//AI()
+		let ai2 = new AI(6, 7)
+		ia.setPlayer(1)
+		ai2.setPlayer(2)
 		report += "3) AI vs AI\n\n"
 		for (let i = 0 ; i < 5 ; i += 1) {
 			let res = this.game(ia, ai2)
@@ -164,7 +173,8 @@ class Test {
 	}
 
 	caseTests() {
-		let ia = new RandomAI()//IA(1)
+		let ia = new IA(6, 7)
+		ia.setPlayer(1)
 		let res = { report: "### Case tests\n\n", win: 0, testNb: 0 }
 		res.report += "1) Imminent defeat detection\n\n"
 		let map = [
