@@ -24,6 +24,7 @@
     <br/>
     <br/>
     <button onclick="start()">Start</button>
+    <button onclick="test()">Test</button>
 </div>
 <div>
     <table id="map">
@@ -31,6 +32,7 @@
 <p><button class="save" onclick="location.reload();" type="submit">Restart game</button></p>
 <script src="./Map.js"></script>
 <script src="./Puissance4.js"></script>
+<script src="./test.js"></script>
 <script>
     let rows = 6;
     let cols = 7;
@@ -39,6 +41,10 @@
     const p4 = new Puissance4()
 
     const start = () => {}
+    const test = () => {
+        let test = new Test()
+        test.test()
+    }
     const moreRows = () => {
         rows++
         document.getElementById("rows").innerHTML = rows;
