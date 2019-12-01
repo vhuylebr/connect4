@@ -9,10 +9,10 @@ class Map {
     }
 
     printMap() {
-        console.log("MAP DUMP")
-        for (let i = 0 ; i < 7 ; i += 1)  {
+        for (let i = 0; i < 7; i += 1) {
             console.log(this.map[i])
         }
+        console.log("")
     }
 
     isFinished = (depth, weight) => {
@@ -34,28 +34,20 @@ class Map {
             this.player = this.player == 1 ? 2 : 1;
             this.moves += 1;
             return true;
-        } else {
-            /*console.log("ERR", this.map[0][column], column, this.columns)
-            if (column == 6) {
-                console.log("INSIDE MAP ====> " + this.map[0][column])
-                for (let i = 0 ; i < 7 ; i += 1)  {
-                    console.log(this.map[i])
-                }
-            }*/
+        } else
             return false;
-        }
     }
     getPositionWeight = (row, column, rowAdd, columnAdd) => {
         var weightPlayer1 = 0;
         var weightPlayer2 = 0;
 
         for (var i = 0; i < 4; i++) {
-            if (this.map[row][column] == 1) {
+            if (this.map[row][column] == (this.iaPlayer == 1 ? 2 : 1)) {
                 weightPlayer1++;
                 if (weightPlayer1 == 4) {
                     return -Infinity;
                 }
-            } else if (this.map[row][column] == 2) {
+            } else if (this.map[row][column] == this.iaPlayer) {
                 weightPlayer2++;
                 if (weightPlayer2 == 4) {
                     return Infinity;

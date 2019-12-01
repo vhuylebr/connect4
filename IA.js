@@ -52,12 +52,8 @@ class IA {
     }
 
     play(map) {
-        let mapObj = new Map(map, this.player, this.rows, this.columns)
+        let mapObj = new Map(map, this.player, this.rows, this.columns, this.player)
         let res = this.alphaBeta(mapObj, 5, true)
-        console.log("Start of turn")
-        mapObj.printMap()
-        console.log("")
-        console.log("AI plays on ", res.column)
         return res.column
     }
 }
