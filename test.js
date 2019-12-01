@@ -62,124 +62,146 @@ class Test {
     }
 
     game(player1, player2) {
-        let map = [
-            [0, 0, 0, 0, 0, 0, 0],
-            [0, 0, 0, 0, 0, 0, 0],
-            [0, 0, 0, 0, 0, 0, 0],
-            [0, 0, 0, 0, 0, 0, 0],
-            [0, 0, 0, 0, 0, 0, 0],
-            [0, 0, 0, 0, 0, 0, 0],
-            [0, 0, 0, 0, 0, 0, 0],
+		let map = [
+			[0,0,0,0,0,0,0],
+			[0,0,0,0,0,0,0],
+			[0,0,0,0,0,0,0],
+			[0,0,0,0,0,0,0],
+			[0,0,0,0,0,0,0],
+			[0,0,0,0,0,0,0],
+			[0,0,0,0,0,0,0],
 
-        ]
-        player1.setPlayer(1)
-        player2.setPlayer(2)
-        let actPlayer = 1
-        let col = player1.play(map)
-        let lastMove = { row: this.getAvailRow(map, col), col }
-        map[lastMove.row][lastMove.col] = actPlayer
-        let i
-        for (i = 0; i < 100 && !win(lastMove.row, lastMove.col, actPlayer, map); i += 1) {
-            actPlayer = actPlayer == 1 ? 2 : 1
-            if (actPlayer == 1)
-                col = player1.play(map)
-            else
-                col = player2.play(map)
-            lastMove = { row: this.getAvailRow(map, col), col }
-            if (lastMove.row == -1)
-                i = 99
-            else
-                map[lastMove.row][lastMove.col] = actPlayer
+		]
+		player1.setPlayer(1)
+		player2.setPlayer(2)
+		let actPlayer = 1
+		let col = player1.play(map)
+		let lastMove = {row: this.getAvailRow(map, col), col}
+		let tie = false
+		map[lastMove.row][lastMove.col] = actPlayer
+		let i
+		for (i = 0 ; i < 100 && !win(lastMove.row, lastMove.col, actPlayer, map) ; i += 1) {
+			actPlayer = actPlayer == 1 ? 2 : 1
+			if (actPlayer == 1)
+				col = player1.play(map)
+			else
+				col = player2.play(map)
+            lastMove = {row: this.getAvailRow(map, col), col}
+            if (lastMove.row == -1) {
+                tie = true
+                break
+            }
+			map[lastMove.row][lastMove.col] = actPlayer
+		}
+		let res = {
+			result: i == 100 ? -1 : (tie ? 0 : actPlayer),
+			rounds: i,
+		}
 
-        }
-        let res = {
-            result: i == 100 ? 0 : actPlayer,
-            rounds: i,
-        }
-        return (res)
-    }
+		return (res)
+	}
 
-    gameTest() {
-        let report = "### Duel tests\n\n"
-        let random = new RandomAI()
-        let ia = new IA(7, 7)
-        ia.setPlayer(1)
-        random.setPlayer(2)
-        let totalVictories = 0
-        let totalTimeouts = 0
+	gameTest() {
+        console.log("Game tests in progress.")
+		let report = "### Duel tests\n\n"
+		let random = new RandomAI()
+		let ia = new IA(7, 7)
+		ia.setPlayer(1)
+		random.setPlayer(2)
+		let totalVictories = 0
+		let totalTimeouts = 0
 
-        // AI vs Random
-        report += "1) AI vs Random\n\n"
-        let victories = 0
-        let timeouts = 0
-        for (let i = 0; i < 5; i += 1) {
-            console.log("new game")
-            let res = this.game(ia, random)
-            report += "# Match n°" + (i + 1) + "/5 ended in " + res.rounds + " rounds :\n"
-            report += "=> " + (res.result == 0 ? "Timeout" : "Player " + (res.result == 1 ? "AI" : "Random") + " wins !") + "\n\n"
-            if (res.result == 1)
-                victories += 1
-            else if (res.result == 0)
-                timeouts += 1
-        }
-        report += "### Total : " + victories + "/5 (" + timeouts + " timeouts) ###\n\n"
-        totalTimeouts += timeouts
-        totalVictories += victories
+		// AI vs Random
+		report += "1) AI vs Random\n\n"
+		let victories = 0
+		let timeouts = 0
+		let ties = 0
+		for (let i = 0 ; i < 5 ; i += 1) {
+			let res = this.game(ia, random)
+			report += "# Match n°" + (i + 1) + "/5 ended in " + res.rounds + " rounds :\n"
+			if (res.result == 0) {
+				ties += 1
+				report += "=> Tie, map was filled before a player won.\n\n"
+			} else if (res.result == -1) {
+				timeouts += 1
+				report += "=> Timeout.\n\n"
+			} else {
+				if (res.result == 1)
+					victories += 1
+                report += "=> Player " + (res.result == 1 ? "AI" : "Random") + " wins !\n\n"
+			}
+		}
+		report += "### Total : " + victories + "/5 (" + timeouts + " timeouts) (" + ties + " ties) ###\n\n"
+		totalTimeouts += timeouts
+		totalVictories += victories
 
-        ia.setPlayer(2)
-        random.setPlayer(1)
-            // Random vs AI
-        report += "2) Random vs AI\n\n"
-        victories = 0
-        timeouts = 0
-        for (let i = 0; i < 5; i += 1) {
-            let res = this.game(random, ia)
-            report += "# Match n°" + (i + 1) + "/5 ended in " + res.rounds + " rounds :\n"
-            report += "=> " + (res.result == 0 ? "Timeout" : "Player " + (res.result == 2 ? "AI" : "Random") + " wins !") + "\n\n"
-            if (res.result == 2)
-                victories += 1
-            else if (res.result == 0)
-                timeouts += 1
-        }
-        report += "### Total : " + victories + "/5 (" + timeouts + " timeouts) ###\n\n"
-        totalTimeouts += timeouts
-        totalVictories += victories
+		ia.setPlayer(2)
+		random.setPlayer(1)
+		// Random vs AI
+		report += "2) Random vs AI\n\n"
+		victories = 0
+		timeouts = 0
+		ties = 0
+		for (let i = 0 ; i < 5 ; i += 1) {
+			let res = this.game(random, ia)
+			report += "# Match n°" + (i + 1) + "/5 ended in " + res.rounds + " rounds :\n"
+			if (res.result == 0) {
+				ties += 1
+				report += "=> Tie, map was filled before a player won.\n\n"
+			} else if (res.result == -1) {
+				timeouts += 1
+				report += "=> Timeout.\n\n"
+			} else {
+				if (res.result == 2)
+					victories += 1
+                report += "=> Player " + (res.result == 2 ? "AI" : "Random") + " wins !\n\n"
+			}
+		}
+		report += "### Total : " + victories + "/5 (" + timeouts + " timeouts) (" + ties + " ties) ###\n\n"
+		totalTimeouts += timeouts
+		totalVictories += victories
 
 
-        // AI vs AI
-        victories = 0
-        timeouts = 0
-        let ai2 = new IA(7, 7)
-        ia.setPlayer(1)
-        ai2.setPlayer(2)
-        report += "3) AI vs AI\n\n"
-        for (let i = 0; i < 5; i += 1) {
-            let res = this.game(ia, ai2)
-            report += "# Match n°" + (i + 1) + "/5 ended in " + res.rounds + " rounds :\n"
-            report += "=> " + (res.result == 0 ? "Timeout" : "Player " + res.result + " wins !") + "\n\n"
-            if (res.result == 2)
-                victories += 1
-            else if (res.result == 0)
-                timeouts += 1
-        }
-        report += "### Total : " + victories + "/5 (" + timeouts + " timeouts) ###\n\n"
-        totalTimeouts += timeouts
-        totalVictories += victories
+		// AI vs AI
+		victories = 0
+		timeouts = 0
+		ties = 0
+		let ai2 = new IA(7, 7)
+		ia.setPlayer(1)
+		ai2.setPlayer(2)
+		report += "3) AI vs AI\n\n"
+		for (let i = 0 ; i < 5 ; i += 1) {
+			let res = this.game(ia, ai2)
+			report += "# Match n°" + (i + 1) + "/5 ended in " + res.rounds + " rounds :\n"
+			if (res.result == 0) {
+				ties += 1
+				report += "=> Tie, map was filled before a player won.\n\n"
+			} else if (res.result == -1) {
+				timeouts += 1
+				report += "=> Timeout.\n\n"
+			} else {
+				report += "=> Player " + res.result + " wins !\n\n"
+			}
+		}
+		report += "### Total : " + timeouts + " timeouts, " + ties + " ties ###\n\n"
+		totalTimeouts += timeouts
+		totalVictories += victories
 
-        report += "==> Final grade : " + (totalVictories / 15 * 100) + " %\n"
-        report += totalVictories + " / 15 victories with " + totalTimeouts + " timeouts\n"
+		report += "==> Final grade : " + (totalVictories / 10 * 100) + " %\n"
+		report += totalVictories + " / 10 victories with " + totalTimeouts + " timeouts\n"
+		report += "AI vs AI games gave out a tie percentage of " + (ties / 5 * 100) + "%\n\n"
 
-        return report
-    }
+		return report
+	}
 
     testCase(map, ia, answer, res) {
         let col = ia.play(map)
         res.testNb += 1
         res.report += "# Test " + res.testNb + " : " + (col == answer && ++res.win ? "OK" : "KO") + "\n\n"
-        res.report += "answer was " + answer + ", tried " + col + "\n"
     }
 
     caseTests() {
+        console.log("Testing special cases.")
         let ia = new IA(7, 7)
         ia.setPlayer(1)
         let res = { report: "### Case tests\n\n", win: 0, testNb: 0 }
@@ -291,17 +313,10 @@ class Test {
 ###############################################
 
 `
+        console.log("Testing AI, please wait a moment.")
         report += this.gameTest()
         report += this.caseTests()
         console.log(report)
     }
 
-    abc() {
-        let random = new IA(7, 7)
-        let ia = new IA(7, 7)
-        ia.setPlayer(1)
-        random.setPlayer(2)
-        let res = this.game(ia, random)
-        console.log("winner is ", res)
-    }
 }
